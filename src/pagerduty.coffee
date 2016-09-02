@@ -5,7 +5,7 @@ pagerDutySubdomain     = process.env.HUBOT_PAGERDUTY_SUBDOMAIN
 pagerDutyBaseUrl       = "https://#{pagerDutySubdomain}.pagerduty.com/api/v1"
 pagerDutyServices      = process.env.HUBOT_PAGERDUTY_SERVICES
 pagerNoop              = process.env.HUBOT_PAGERDUTY_NOOP
-pagerNoop               = false if pagerNoop is "false" or pagerNoop  is "off"
+pagerNoop              = false if pagerNoop is "false" or pagerNoop  is "off"
 
 class PagerDutyError extends Error
 module.exports =

@@ -23,6 +23,7 @@ Then add **hubot-pager-me** to your `external-scripts.json`:
 * HUBOT_PAGERDUTY_API_KEY - Get one from https://<your subdomain>.pagerduty.com/api_keys
 * HUBOT_PAGERDUTY_SERVICE_API_KEY - Service API Key from a 'General API Service'. This should be assigned to a dummy escalation policy that doesn't actually notify, as hubot will trigger on this before reassigning it
 * HUBOT_PAGERDUTY_SERVICES - (optional) Provide a comma separated list of service identifiers (e.g. `PFGPBFY`) to restrict queries to only those services.
+* HUBOT_PAGERDUTY_HUBOT_AUTH - (optional) Integration with hubot-auth for controlling access to endpoints
 
 ### Webhook
 
@@ -110,6 +111,19 @@ hubot-pager-me makes some assumptions about how you are using PagerDuty:
 * PagerDuty email matches chat email
   * override with `hubot pager me as <pagerduty email>`
 * The Service used by hubot-pager-me should not be assigned to an escalation policy with real people on it. Instead, it should be a dummy user that doesn't have any notification rules. If this isn't done, the escalation policy assigned to it will be notified, and then hubot will immediately reassign to the proper team
+
+## Hubot Auth
+
+Integration with `hubot-auth` to provide a basic level of authorisation.
+Currently implmemented functionality is outlined below:
+
+
+* HUBOT_PAGERDUTY_HUBOT_AUTH - turn hubot-auth integration on or off
+* HUBOT_PAGERDUTY_HUBOT_AUTH_ROLE_USER - the name of the role that contains
+  chat users that able to associate a pagerduty user with their account.
+  Default: `pd_users`
+    * hubot pager me as X
+
 
 ## Development
 

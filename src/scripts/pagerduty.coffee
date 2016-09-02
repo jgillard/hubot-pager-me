@@ -35,7 +35,7 @@
 #   hubot pager maintenance <minutes> <service_id1> <service_id2> ... <service_idN> - schedule a maintenance window for <minutes> for specified services
 #
 # Authors:
-#   Jesse Newland, Josh Nicols, Jacob Bednarz, Chris Lundquist, Chris Streeter, Joseph Pierri, Greg Hoin, Michael Warkentin
+#   Jesse Newland, Josh Nicols, Jacob Bednarz, Chris Lundquist, Chris Streeter, Joseph Pierri, Greg Hoin, Michael Warkentin, Richard Clark
 
 pagerduty = require('../pagerduty')
 async = require('async')
@@ -44,6 +44,14 @@ moment = require('moment-timezone')
 
 pagerDutyUserId        = process.env.HUBOT_PAGERDUTY_USER_ID
 pagerDutyServiceApiKey = process.env.HUBOT_PAGERDUTY_SERVICE_API_KEY
+pagerHubotAuthEnabled  = process.env.HUBOT_PAGERDUTY_HUBOT_AUTH
+pagerHubotAuthEnabled  = false if pagerHubotAuthEnabled is "false" or pagerHubotAuthEnabled  is "off"
+
+if process.env.HUBOT_PAGERDUTY_HUBOT_AUTH_ROLE_USER
+  pagerHubotAuthRoleUser = process.env.HUBOT_PAGERDUTY_HUBOT_AUTH_ROLE_USER
+else
+  pagerHubotAuthRoleUser = 'pd_users'
+
 
 module.exports = (robot) ->
 
@@ -66,6 +74,11 @@ module.exports = (robot) ->
     msg.send cmds.join("\n")
 
   robot.respond /pager(?: me)? as (.*)$/i, (msg) ->
+    if pagerHubotAuthEnabled
+      unless robot.auth.hasRole(msg.envelope.user, pagerHubotAuthRoleUser)
+        msg.send "You need the #{pagerHubotAuthRoleUser} role to use this command"
+        return
+
     email = msg.match[1]
     msg.message.user.pagerdutyEmail = email
     msg.send "Okay, I'll remember your PagerDuty email is #{email}"
